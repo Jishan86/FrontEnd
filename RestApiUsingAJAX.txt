@@ -1,0 +1,35 @@
+//index.html
+
+<body >
+  <p id="p"></p>
+  <input type="button" value="getAll" onclick="loadDoc()">
+  <script src="logic.js"></script>
+</body>
+
+//logic.js
+
+function loadDoc() {
+    var fd="";
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {    
+           document.getElementById("p").innerHTML =  this.responseText
+        }
+      };
+      xhttp.open("GET", "https://localhost:7269/api/Employee", true);
+      xhttp.send();
+    }
+    
+//logic.js		
+
+function loadDoc() {
+    var fd="";
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {    
+           document.getElementById("p").innerHTML =  this.responseText
+        }
+      };
+      xhttp.open("GET", "https://localhost:7269/api/Employee/1002", true);
+      xhttp.send();
+    }
