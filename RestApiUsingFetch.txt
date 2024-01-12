@@ -1,0 +1,44 @@
+//index.html
+
+<body >
+  <p id="p"></p>
+  <script src="logic.js"></script>
+</body>
+
+//logic.js
+
+async function getdata()
+{
+res= await fetch('https://localhost:7269/api/Employee');
+data=await res.json()
+let fd="";
+	  for(let x of data)
+	  {console.log(x)
+	      for(let b in x)
+		  {console.log(x[b])
+		fd+=x[b]+"<br/>"
+	      }
+	  fd+="<hr/>";
+	  }
+document.getElementById('p').innerHTML=fd;
+}
+getdata();
+
+//logic.js		
+
+async function getdata()
+{
+res= await fetch('https://localhost:7269/api/Employee/1002');
+data=await res.json()
+let fd="";
+	  for(let x of data)
+	  {console.log(x)
+	      for(let b in x)
+		  {console.log(x[b])
+		fd+=x[b]+"<br/>"
+	      }
+	  fd+="<hr/>";
+	  }
+document.getElementById('p').innerHTML=fd;
+}
+getdata();
