@@ -1,0 +1,350 @@
+﻿// Que1)
+
+
+// index.js
+
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Route,Routes,BrowserRouter } from 'react-router-dom';
+import './index.css';
+import App from './App';
+import Home from './Home';
+
+
+import Employeelist from './Employeelist';
+
+
+import Pagenotfound from './Pagenotfound';
+
+
+import EmpCreate from './EmpCreate';
+
+
+
+
+import reportWebVitals from './reportWebVitals';
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}>
+        <Route path="/" element={<Home />} />
+        <Route path="Home" element={<Home />} />
+        
+        <Route path="Employeelist" element={<Employeelist />} />
+       
+        <Route path="*" element={<Pagenotfound />} />
+
+
+        <Route path='create' element={<EmpCreate />}></Route>
+        
+        </Route>
+      </Routes>
+    </BrowserRouter>
+);
+
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+
+
+
+//_____________________________
+
+
+// App.js
+
+
+import logo from './logo.svg';
+import './App.css';
+import { Link,Outlet,useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
+
+
+
+export default function App() {
+
+
+  return (
+    <div>
+      <nav>
+        <ul>
+          <li>     <Link to="/Home">Home</Link> </li>
+
+
+          <li>     <Link to="/Employeelist">Employeelist</Link> </li>
+         
+        </ul>
+      </nav>
+
+
+      <Outlet></Outlet>
+    </div>
+  );
+
+
+}
+
+
+
+
+//______________________
+
+
+// Home.js
+
+
+export default function Home(){
+    return(
+        <div>
+           <i> Welcome to React CRUD project</i>
+        </div>
+    )
+}
+
+
+//______________________
+
+
+// Employeelist.js
+
+
+import React from 'react';
+import {Link,useNavigate} from "react-router-dom"
+import { useState, useEffect } from "react";
+export default function Employeelist() {
+    
+    const chks=sessionStorage.getItem("key");
+
+
+    const [employees, setEmployee] = useState([]);
+    let navigate = useNavigate();     
+
+
+    useEffect(() => {
+        if(chks==="")
+        {
+         navigate("/");
+        }
+   
+        fetch("https://localhost:7269/api/Employee")
+            .then(res => res.json())
+            .then((result) => { setEmployee(result); }
+            );
+    }, []);
+    return (
+        <div>
+            <h4><Link to="/create">Create</Link></h4>
+            <h2>Employees Data...</h2>
+            <table> <thead>
+                <tr>
+                  
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+           </thead>
+                <tbody>
+                    {employees.map(emp =>(
+                        <tr key={emp.id}>
+                           
+                            <td>{emp.name}</td>
+                            <td>{emp.email}</td>
+
+
+                        </tr>
+                     ))
+                    }
+                </tbody> </table>
+        </div>
+    );
+}
+
+
+//___________________________
+
+
+// Pagenotfound.js
+
+
+
+
+export default function Pagenotfound(){
+    return(
+        <div>
+          Sorry..this is the Error page
+        </div>
+    )
+}
+
+
+
+
+//___________________________
+
+
+
+
+// EmpCreate.js
+
+
+import { useState} from "react";
+import { useNavigate} from "react-router-dom"
+
+
+ export default function EmpCreate() {
+    const [employee, setEmployee] = useState({});
+     let navigate = useNavigate();
+     const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setEmployee(values => ({ ...values, [name]: value }))
+    }
+    const handleSubmit = (event) => {
+
+
+        let demo = JSON.stringify(employee);
+      
+        fetch("https://localhost:7269/api/Employee", {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: demo
+        }).then(r => { console.log(r.json()) })
+
+
+        event.preventDefault();
+
+
+        navigate('/');         }
+return (
+            <form onSubmit={handleSubmit}>
+                <label>name:</label>
+                <input
+                    type="text"
+                    name="name"
+                    onChange={handleChange}
+                />
+                <br /><label>Email:</label>
+                <input
+                    type="text"
+                    name="email"
+                    onChange={handleChange}
+                />
+                <br /><label>Department:</label>
+                <input
+                    type="text"
+                    name="department"
+                    onChange={handleChange}
+                />
+                <br />   
+                <input type="submit" />
+            </form>
+        );
+    }
+
+
+//____________End-of-Que1_______________________
+
+
+
+
+//  Que 2)
+
+
+//index.html
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Simple Calculator</h2>
+
+
+    <form name="frm">
+      <label for="num1">No1</label>
+      <input type="text" id="num1" />
+
+
+      <label for="num2">No2</label>
+      <input type="text" id="num2" />
+
+
+      <select name="sl" id="dropdown" onchange="calculate()">
+        <option value="select">select</option>
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+      </select>
+
+
+      
+
+
+      <label for="result">Result</label>
+      <input type="text" id="result" disabled />
+    </form>
+
+
+    <script src="logic.js"></script>
+  </body>
+</html>
+
+
+//___________________
+
+
+// logic.js
+
+
+function calculate() {
+  var num1 = parseFloat(document.getElementById("num1").value);
+  var num2 = parseFloat(document.getElementById("num2").value);
+  var operation = document.getElementById("dropdown").value;
+
+
+  var l=document.frm.sl.length
+  
+  for(i=0;i<l;i++)
+{
+  if(document.frm.sl[i].selected)
+
+
+  {
+
+
+    if(operation=='+')
+    var result=(num1+num2);
+
+
+   else if(operation=='-')
+    var result=(num1-num2);
+
+
+    else if(operation=='*')
+    var result=(num1*num2);
+
+
+    else if(operation=='/')
+    var result=(num1/num2);
+  }
+}
+
+
+  // Display the result
+  document.getElementById("result").value = result;
+}
+
+
+//___________________End-of-Que2________________
